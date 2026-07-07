@@ -48,8 +48,10 @@ call — see [docs/clinical-grounding.md](docs/clinical-grounding.md).
 ## Privacy
 
 Records never leave the phone. No accounts, no backend, no analytics, no data
-collection. Storage is local (AsyncStorage); sharing happens only through the
-OS share sheet, at the user's explicit request. Voice input uses the device's
+collection — the app makes zero network requests of its own (even the offline
+indicator reads connectivity state from the OS). Storage is local
+(AsyncStorage); sharing happens only through the OS share sheet, at the user's
+explicit request. Voice input uses the device's
 speech recognition service, which on some platforms processes audio off-device —
 typing is always available instead. See [docs/privacy-policy.md](docs/privacy-policy.md).
 

@@ -1,49 +1,30 @@
 import { useEffect, useState, useRef } from 'react';
-import { Text, StyleSheet, Animated, AppState, Platform } from 'react-native';
+import { Text, StyleSheet, Animated } from 'react-native';
+import * as Network from 'expo-network';
 import { colors, spacing, borderRadius } from '../constants/theme';
 
-async function checkConnectivity(): Promise<boolean> {
-  if (Platform.OS === 'web') {
-    return navigator.onLine;
-  }
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
-    const response = await fetch('https://clients3.google.com/generate_204', {
-      method: 'HEAD',
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
-
+// Reads connectivity from the OS — the app itself makes no network requests.
 export function OfflineBanner() {
   const [isOffline, setIsOffline] = useState(false);
   const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    checkConnectivity().then(online => setIsOffline(!online));
+    let mounted = true;
 
-    if (Platform.OS === 'web') {
-      const handleOnline = () => setIsOffline(false);
-      const handleOffline = () => setIsOffline(true);
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
-      return () => {
-        window.removeEventListener('online', handleOnline);
-        window.removeEventListener('offline', handleOffline);
-      };
-    }
+    Network.getNetworkStateAsync()
+      .then(state => {
+        if (mounted) setIsOffline(!(state.isConnected ?? true));
+      })
+      .catch(() => {});
 
-    const sub = AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        checkConnectivity().then(online => setIsOffline(!online));
-      }
+    const sub = Network.addNetworkStateListener(state => {
+      setIsOffline(!(state.isConnected ?? true));
     });
-    return () => sub.remove();
+
+    return () => {
+      mounted = false;
+      sub.remove();
+    };
   }, []);
 
   useEffect(() => {

@@ -9,7 +9,8 @@ for us to see.
 
 Nothing. Followup has no accounts, no backend servers, no analytics, and no
 advertising. We do not collect, transmit, store, or sell any personal
-information or health information.
+information or health information. The app makes no network requests of its
+own — it works identically with and without an internet connection.
 
 ## Where your records live
 
