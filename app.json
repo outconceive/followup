@@ -9,10 +9,10 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sjseto.followup"
+      "bundleIdentifier": "com.outconceive.followup"
     },
     "android": {
-      "package": "com.sjseto.followup",
+      "package": "com.outconceive.followup",
       "adaptiveIcon": {
         "backgroundColor": "#1a2332",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
